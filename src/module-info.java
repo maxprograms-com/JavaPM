@@ -12,4 +12,5 @@ module javapm {
 	exports com.maxprograms.javapm;
 
 	requires transitive openxliff;
+	requires bcp47j;
 }

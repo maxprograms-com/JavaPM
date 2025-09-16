@@ -4,7 +4,7 @@
 	<property name="source" value="17" />
 	<property name="build.compiler" value="javac10+" />
 	<path id="JavaPM.classpath">
-        <pathelement location="lib/dtd.jar" />
+        <pathelement location="lib/bcp47j.jar" />
         <pathelement location="lib/json.jar" />
         <pathelement location="lib/jsoup.jar" />
         <pathelement location="lib/mapdb.jar" />
@@ -40,12 +40,13 @@
 		<link destDir="dist" modulepath="lib:${java.home}/jmods">
 			<module name="javapm" />
 		</link>
+		<delete file="lib/javapm.jar" />
 		<delete file="dist/lib/jrt-fs.jar" />		
 	</target>
 	<target name="copyBats" if="isWindows">
-        <description>Copy .bat to /dist</description>
-        <copy file="createxliff.bat" todir="dist" />
-        <copy file="mergexliff.bat" todir="dist" />
+        <description>Copy .cmd to /dist</description>
+        <copy file="createxliff.cmd" todir="dist" />
+        <copy file="mergexliff.cmd" todir="dist" />
     </target>
     <target name="copyShells" unless="isWindows">
         <description>Copy .sh to /dist</description>
