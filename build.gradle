@@ -2,6 +2,8 @@ plugins {
     id 'java'
 }
 
+defaultTasks 'dist'
+
 // Disable all caching to ensure clean builds
 gradle.projectsEvaluated {
     tasks.withType(JavaCompile) {
