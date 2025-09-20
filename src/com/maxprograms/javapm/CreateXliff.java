@@ -51,7 +51,7 @@ public class CreateXliff {
         String srcLang = "";
         String tgtLang = "";
         String encoding = "ISO-8859-1";
-        boolean xliff2 = false;
+        String version = "1.2";
         boolean reuse = false;
 
         for (int i = 0; i < arguments.length; i++) {
@@ -76,7 +76,13 @@ public class CreateXliff {
                 encoding = arguments[i + 1];
             }
             if (arg.equals("-2.0")) {
-                xliff2 = true;
+                version = "xliff20";
+            }
+            if (arg.equals("-2.1")) {
+                version = "xliff21";
+            }
+            if (arg.equals("-2.2")) {
+                version = "xliff22";
             }
             if (arg.equals("-reuse")) {
                 reuse = true;
@@ -114,14 +120,14 @@ public class CreateXliff {
             return;
         }
         try {
-            generateXliff(srcFolder, xliff, srcLang, tgtLang, encoding, xliff2, reuse);
+            generateXliff(srcFolder, xliff, srcLang, tgtLang, encoding, version, reuse);
         } catch (IOException | SAXException | ParserConfigurationException e) {
             logger.log(Level.ERROR, e.getMessage(), e);
         }
     }
 
     private static void generateXliff(String src, String xliff, String srcLang, String tgtLang, String encoding,
-            boolean xliff2, boolean reuse) throws IOException, SAXException, ParserConfigurationException {
+            String version, boolean reuse) throws IOException, SAXException, ParserConfigurationException {
         File srcFolder = new File(src);
         if (!srcFolder.exists()) {
             throw new IOException(Messages.getString("CreateXliff.3"));
@@ -172,7 +178,10 @@ public class CreateXliff {
                 params.put("tgtLang", tgtLang);
             }
             params.put("embed", "yes");
-            params.put("xliff20", xliff2 ? "yes" : "no");
+            if (version.startsWith("xliff2")) {
+                params.put(version, "yes");
+            }
+            params.put("version", version);
             List<String> result = Convert.run(params);
             if (Constants.ERROR.equals(result.get(0))) {
                 throw new IOException(result.get(1));
@@ -181,15 +190,15 @@ public class CreateXliff {
                 String name = source.substring(0, source.lastIndexOf('.'));
                 String translations = name + "_" + tgtLang + ".properties";
                 if (new File(translations).exists()) {
-                    recoverTranslations(translations, xlf, xliff2, encoding);
+                    recoverTranslations(translations, xlf, version, encoding);
                 }
             }
             xliffs.add(xlf);
         }
-        join(xliffs, src, xliff, srcLang, tgtLang, xliff2);
+        join(xliffs, src, xliff, srcLang, tgtLang, version);
     }
 
-    private static void recoverTranslations(String translations, String xlf, boolean xliff2, String encoding)
+    private static void recoverTranslations(String translations, String xlf, String version, String encoding)
             throws IOException, SAXException, ParserConfigurationException {
         Properties props;
         try (FileInputStream is = new FileInputStream(new File(translations))) {
@@ -201,7 +210,7 @@ public class CreateXliff {
         SAXBuilder builder = new SAXBuilder();
         Document doc = builder.build(xlf);
         Element root = doc.getRootElement();
-        if (xliff2) {
+        if (version.startsWith("xliff2")) {
             recoverXliff2(root, props);
         } else {
             recoverXliff1(root, props);
@@ -259,16 +268,26 @@ public class CreateXliff {
     }
 
     private static void join(List<String> xliffs, String src, String xliff, String srcLang, String tgtLang,
-            boolean xliff2) throws SAXException, IOException, ParserConfigurationException {
+            String version) throws SAXException, IOException, ParserConfigurationException {
         Document doc = new Document(null, "xliff", null, null);
         Element root = doc.getRootElement();
-        if (xliff2) {
-            root.setAttribute("version", "2.0");
+        if (version.startsWith("xliff2")) {
+            switch (version) {
+            case "xliff20":
+                root.setAttribute("version", "2.0");
+                break;
+            case "xliff21":
+                root.setAttribute("version", "2.1");
+                break;
+            case "xliff22":
+                root.setAttribute("version", "2.2");
+                break;
+            }            
             root.setAttribute("srcLang", srcLang);
             if (!tgtLang.isEmpty()) {
                 root.setAttribute("trgLang", tgtLang);
             }
-            root.setAttribute("xmlns", "urn:oasis:names:tc:xliff:document:2.0");
+            root.setAttribute("xmlns", version.equals("xliff22") ? "urn:oasis:names:tc:xliff:document:2.2" : "urn:oasis:names:tc:xliff:document:2.0");
             root.setAttribute("xmlns:mtc", "urn:oasis:names:tc:xliff:matches:2.0");
             root.setAttribute("xmlns:mda", "urn:oasis:names:tc:xliff:metadata:2.0");
         } else {
@@ -286,7 +305,7 @@ public class CreateXliff {
             String original = file.getAttributeValue("original");
             String relative = Utils.getRelativePath(src, original);
             file.setAttribute("original", relative);
-            if (xliff2) {
+            if (version.startsWith("xliff2")) {
                 file.setAttribute("id", "" + i);
             }
             root.addContent("\n");

@@ -21,7 +21,8 @@ Running `.\createxliff.cmd` or `./createxliff.sh` without parameters displays he
 ```text
 Usage:
 
-    createxliff.cmd [-help] -src sourceFolder -xliff xliffFile -srcLang sourceLanguage [-tgtLang targetLanguage] [-reuse] [-2.0]
+    createxliff.sh [-help] -src sourceFolder -xliff xliffFile -srcLang sourceLanguage [-enc characterSet] 
+    [-tgtLang targetLanguage] [-reuse] [-2.0] [-2.0] [-2.2]
 
 Where:
 
@@ -33,6 +34,8 @@ Where:
    -tgtLang:   (optional) target language code
    -reuse:     (optional) reuse existing translations
    -2.0:       (optional) generate XLIFF 2.0
+   -2.1:       (optional) generate XLIFF 2.1
+   -2.2:       (optional) generate XLIFF 2.2
 ```
 
 ## Import translated XLIFF
