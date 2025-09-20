@@ -1,5 +1,7 @@
 .DS_Store
-/.vscode/
-/bin/
+.vscode/
+bin/
 lib/javapm.jar
-/dist/
+dist/
+build/
+.gradle/

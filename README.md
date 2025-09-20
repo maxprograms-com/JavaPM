@@ -16,12 +16,13 @@ You can download compressed binary packages for Windows, macOS and Linux from [h
 
 ## Convert .properties to XLIFF
 
-Running `.\createxliff.bat` or `./createxliff.sh` without parameters displays help for XLIFF generation.
+Running `.\createxliff.cmd` or `./createxliff.sh` without parameters displays help for XLIFF generation.
 
 ```text
 Usage:
 
-    createxliff.bat [-help] -src sourceFolder -xliff xliffFile -srcLang sourceLanguage [-tgtLang targetLanguage] [-reuse] [-2.0]
+    createxliff.sh [-help] -src sourceFolder -xliff xliffFile -srcLang sourceLanguage [-enc characterSet] 
+    [-tgtLang targetLanguage] [-reuse] [-2.0] [-2.0] [-2.2]
 
 Where:
 
@@ -33,11 +34,13 @@ Where:
    -tgtLang:   (optional) target language code
    -reuse:     (optional) reuse existing translations
    -2.0:       (optional) generate XLIFF 2.0
+   -2.1:       (optional) generate XLIFF 2.1
+   -2.2:       (optional) generate XLIFF 2.2
 ```
 
 ## Import translated XLIFF
 
-Running `.\mergexliff.bat` or `./mergexliff.sh` without parameters displays help for importing translated XLIFF files.
+Running `.\mergexliff.cmd` or `./mergexliff.sh` without parameters displays help for importing translated XLIFF files.
 
 ```text
 Usage:
@@ -55,23 +58,23 @@ Where:
 
 ## Build Requirements
 
-- JDK 17 or newer is required for compiling and building.
-- Apache Ant 1.10.12 or newer.
+- JDK 21 is required for compiling and building. Get it from [https://adoptium.net/](https://adoptium.net/).
+- Gradle 9.0. Get it from [https://gradle.org/install/](https://gradle.org/install/).
 
 Pre-built binaries already include everything you need to run all options.
 
 ## Building
 
 - Checkout this repository.
-- Point your JAVA_HOME variable to JDK 17
-- Run `ant` to generate a binary distribution in `./dist`
+- Point your JAVA_HOME variable to JDK 21
+- Run `gradle` to generate a binary distribution in `./dist`
 
 ### Steps for building
 
 ``` bash
   git clone https://github.com/rmraya/JavaPM.git
   cd JavaPM
-  ant
+  gradle
 ```
 
 A binary distribution will be created in `/dist` folder.
