@@ -1,6 +1,6 @@
 # JavaPM
 
-![JavaPM icon](images/Orange_squares.png)
+![JavaPM icon](images/JavaPM_90_rounded.png)
 
 ## Java Properties Manager
 
