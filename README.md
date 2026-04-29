@@ -65,14 +65,14 @@ Pre-built binaries already include everything you need to run all options.
 
 ## Building
 
-- Checkout this repository.
+- Clone this repository.
 - Point your JAVA_HOME variable to JDK 21
 - Run `gradle` to generate a binary distribution in `./dist`
 
 ### Steps for building
 
 ``` bash
-  git clone https://github.com/rmraya/JavaPM.git
+  git clone https://github.com/maxprograms-com/JavaPM.git
   cd JavaPM
   gradle
 ```
